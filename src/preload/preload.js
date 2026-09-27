@@ -25,6 +25,12 @@ contextBridge.exposeInMainWorld('api', {
   openExternal: (u) => inv('shell:open', u),
   setBusy: (b) => inv('app:busy', b),
   onQuitRequested: (fn) => on('app:quitRequested', fn),
+  version: () => inv('app:version'),
+  update: {
+    status: () => inv('update:status'), check: () => inv('update:check'),
+    download: () => inv('update:download'), install: () => inv('update:install'),
+    onStatus: (fn) => on('update:status', fn),
+  },
   metrics: () => inv('app:metrics'),
   bibles: {
     list: () => inv('bibles:list'), load: (f) => inv('bibles:load', f),

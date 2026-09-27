@@ -5,11 +5,39 @@ A church livestream studio (OBS/XSplit-style) with an EasyWorship-style lyrics &
 - **Left half — Presenter:** schedule, preview/live slides, songs, scriptures (verse by verse), media, custom slides, themes. It sends to your projector monitors, to the network, and optionally onto the livestream.
 - **Right half — Studio:** scenes, sources, audio mixer, and simultaneous streaming to YouTube, Facebook, TikTok and Instagram (plus Twitch/custom), with recording.
 
-## Starting it
+## Installing on the church laptop (USB key)
+
+1. At home, run `npm run dist`. This creates **`dist\Sanctuary-Studio-Setup-X.Y.Z.exe`** (about 125 MB).
+2. Copy that one file to the USB key.
+3. On the church laptop, double-click it. It installs in a few seconds, with no admin password, and adds desktop and Start-menu shortcuts.
+   - Windows may show *"Windows protected your PC"* because the app isn't signed with a paid certificate. Click **More info → Run anyway**. This only happens once.
+4. To bring your songs, scenes and themes from home: on the home PC use **Settings › Advanced › Back up everything**, put the `.json` file on the USB key, then use **Restore backup…** on the church laptop. Stream keys are not included in backups, so paste them once on the church laptop.
+
+## Updates (fix at home → shows up at church)
+
+At home, after fixing something:
+
+```
+npm run release -- "Fixed the song import; bigger scripture text"
+```
+
+This bumps the version (1.0.0 → 1.0.1), commits and pushes the code to GitHub, builds the installer, and publishes it to
+[GitHub Releases](https://github.com/Yannis-Munayi/Sanctuary-Studio/releases). It uses your existing Git login, so no token is needed.
+Use `--minor` for bigger changes (1.0.x → 1.1.0). If the upload fails half-way, rerun with `--no-bump`.
+
+At church, when Sanctuary Studio opens with internet, a green **"⬇ Update 1.0.1 available"** button appears at the top of the Presenter:
+
+1. Click it, read *What's new*, and choose **Download update**. You can keep working, or even stay live, while it downloads.
+2. When it says **"↻ Restart to update"**, click it (not in the middle of a service). The app closes, updates in about 20–30 seconds, and reopens.
+3. All songs, schedules, scenes, themes, stream keys and settings are kept.
+
+You can also check manually in **Settings › Advanced › Version & updates**. If there's no internet at church, copy the new `Setup` file from `dist\` onto the USB key and run it. It upgrades in place the same way.
+
+## Running from source (home PC)
 
 Double-click **`Start Sanctuary Studio.bat`**, or run `npm start` in this folder. The first run installs the components.
 
-Your data (songs, scenes, themes, settings) is saved automatically in `%APPDATA%\Sanctuary Studio\data`. **Settings › Advanced › Back up everything** exports it all to one file.
+Your data (songs, scenes, themes, settings) is saved automatically in `%APPDATA%\Sanctuary Studio\data`. The installed app and the source version share this same data folder on a PC. **Settings › Advanced › Back up everything** exports it all to one file.
 
 ## Presenter (left)
 

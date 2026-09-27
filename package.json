@@ -3,11 +3,15 @@
   "productName": "Sanctuary Studio",
   "version": "1.0.0",
   "description": "Church livestream studio (multi-platform streaming, scenes) + EasyWorship-style lyrics & scripture presenter",
+  "author": "Yannis Munayi",
   "main": "src/main/main.js",
   "private": true,
+  "repository": "https://github.com/Yannis-Munayi/Sanctuary-Studio",
   "scripts": {
     "start": "node tools/launch.js",
-    "bibles": "node tools/build-bibles.js"
+    "bibles": "node tools/build-bibles.js",
+    "dist": "node tools/release.js --local",
+    "release": "node tools/release.js"
   },
   "dependencies": {
     "electron-updater": "^6.8.9",
@@ -17,5 +21,50 @@
   "devDependencies": {
     "electron": "^38.0.0",
     "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "org.sanctuarystudio.app",
+    "productName": "Sanctuary Studio",
+    "copyright": "Built for our church",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "artifactName": "Sanctuary-Studio-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Sanctuary Studio",
+      "deleteAppDataOnUninstall": false
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Yannis-Munayi",
+        "repo": "Sanctuary-Studio",
+        "releaseType": "release"
+      }
+    ]
   }
 }

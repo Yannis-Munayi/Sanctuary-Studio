@@ -7,6 +7,7 @@ const { Streamer } = require('./streamer');
 const { Outputs } = require('./outputs');
 const { NetServer } = require('./netserver');
 const { importEasyWorship } = require('./ewimport');
+const updater = require('./updater');
 
 // Keep rendering/encoding at full speed even when the window is minimised or covered —
 // otherwise Chromium throttles timers and the livestream freezes.
@@ -35,7 +36,7 @@ function createMainWindow() {
   const wa = screen.getPrimaryDisplay().workArea;
   mainWin = new BrowserWindow({
     x: wa.x, y: wa.y, width: wa.width, height: wa.height, minWidth: 1100, minHeight: 640,
-    backgroundColor: '#15171c', title: 'Sanctuary Studio', show: false, autoHideMenuBar: true,
+    backgroundColor: '#15171c', title: `Sanctuary Studio ${app.getVersion()}`, show: false, autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload', 'preload.js'),
       contextIsolation: true, nodeIntegration: false, backgroundThrottling: false,
@@ -109,6 +110,7 @@ app.whenReady().then(() => {
     }
   }, { useSystemPicker: false });
   createMainWindow();
+  updater.init(send, () => busy);
 });
 
 app.on('window-all-closed', () => app.quit());
@@ -155,6 +157,11 @@ handle('app:paths', () => ({
 handle('shell:show', (p) => shell.showItemInFolder(p));
 handle('shell:open', (url) => { if (/^https?:\/\//.test(url)) shell.openExternal(url); });
 handle('app:busy', (b) => { busy = !!b; });
+handle('app:version', () => ({ version: app.getVersion(), packaged: app.isPackaged }));
+handle('update:status', () => updater.get());
+handle('update:check', () => updater.check());
+handle('update:download', () => updater.download());
+handle('update:install', () => updater.install());
 handle('app:metrics', () => {
   const m = app.getAppMetrics();
   const cpu = m.reduce((a, p) => a + (p.cpu ? p.cpu.percentCPUUsage : 0), 0);

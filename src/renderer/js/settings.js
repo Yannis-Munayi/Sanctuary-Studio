@@ -1,6 +1,7 @@
 // Settings dialog (General, Stream, Output, Audio, Video, Hotkeys, Worship, Advanced).
 import { h, modal, buildForm, toast, uid, accelFromEvent, confirmDialog } from './util.js';
 import { settings, saveSettings, PLATFORM_PRESETS } from './state.js';
+import { updateSettingsBlock } from './updates.js';
 
 const PRESETS = {
   x264: ['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow'],
@@ -240,6 +241,7 @@ const PAGES = {
 
   advanced: (app, changed) => {
     const wrap = h('div');
+    wrap.append(h('div', { class: 'form-heading' }, 'Version & updates'), updateSettingsBlock());
     wrap.appendChild(buildForm([
       { type: 'heading', label: 'Reconnect' },
       { key: 'advanced.autoReconnect', label: 'Automatically reconnect', type: 'checkbox', help: 'If a platform drops, only that platform reconnects — the others keep streaming.' },

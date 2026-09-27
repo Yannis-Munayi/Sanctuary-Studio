@@ -7,6 +7,7 @@ import { BibleLibrary } from './worship/bible.js';
 import { Worship } from './worship/worship.js';
 import { Studio } from './studio/studio.js';
 import { openSettings, getEncoders } from './settings.js';
+import { initUpdates } from './updates.js';
 
 const app = {};
 window.__app = app; // handy for debugging in DevTools (F12)
@@ -33,6 +34,7 @@ async function main() {
 
   bus.on('open-settings', (tab) => openSettings(app, tab));
   autoPickEncoder();
+  initUpdates();
 
   // draggable divider between Presenter and Studio
   split.addEventListener('mousedown', (e) => {
